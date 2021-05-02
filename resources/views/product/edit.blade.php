@@ -107,7 +107,7 @@
 			type: 'POST',
 			data: {data: data},
 			success: function(output){
-				// console.log(output);
+				console.log(output);
 				alertOutput(output['msg'],output['message'])
 			}
 		});

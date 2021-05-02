@@ -200,7 +200,7 @@ class ProductController extends Controller {
 	}
 
 	public function uploadGallery(Request $request) {
-		$data = $request->all();
+		$data = $request->all()['data'];
 		$product = $this->postRepository->find($data['product_id']);
 
 		$images = explode(",", $data['images']);

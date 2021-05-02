@@ -6,6 +6,9 @@
 			@include('phobrv::input.inputImage',['key'=>'images','basic'=>true])
 		</div>
 	</div>
+	<div class="box-footer">
+		{{ Form::submit('Lưu cấu hình',array('class'=>'btn btn-primary pull-right')) }}
+	</div>
 </form>
 <label>Danh sách image trong gallery product</label>
 <div class="row">

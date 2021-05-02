@@ -169,7 +169,7 @@ class ProductController extends Controller {
 		}
 
 		$this->postRepository->handleSeoMeta($post, $request);
-		$this->handleMeta($post, $request);
+		// $this->handleMeta($post, $request);
 
 		$msg = __('Update  prodcut success!');
 
@@ -198,34 +198,21 @@ class ProductController extends Controller {
 		$this->userRepository->insertMeta($user, array('product_select' => $request->select));
 		return redirect()->route('productitem.index');
 	}
-	/**
-	 * Handle Meta Product
-	 */
-	public function handleMeta($post, $request) {
-		$arrayMeta = [];
-		$arrayMeta['price'] = isset($request->price) ? $request->price : '';
-		// $arrayMeta['code'] = isset($request->code) ? $request->code : '';
-		// $arrayMeta['count'] = isset($request->count) ? $request->count : '';
-		// $arrayMeta['madein'] = isset($request->madein) ? $request->madein : '';
-		// $arrayMeta['price_old'] = isset($request->price_old) ? $request->price_old : '0';
-		// $arrayMeta['unit'] = isset($request->unit) ? $request->unit : '';
-		// $arrayMeta['brand'] = isset($request->brand) ? $request->brand : '';
-		// $arrayMeta['pack'] = isset($request->pack) ? $request->pack : '';
-		// $arrayMeta['album_id'] = isset($request->album_id) ? $request->album_id : '';
-		$this->postRepository->insertMeta($post, $arrayMeta);
 
+	public function uploadGallery(Request $request) {
 		$data = $request->all();
-		if (isset($data['images'])) {
-			$this->uploadGallery($post, $data['images']);
-		}
-	}
-	public function uploadGallery($product, $images) {
-		$images = explode(",", $images);
+		$product = $this->postRepository->find($data['product_id']);
+
+		$images = explode(",", $data['images']);
 		if ($images && count($images) > 0) {
 			foreach ($images as $key => $path) {
 				$this->postRepository->insertMultiMeta($product, 'image', $path);
 			}
 		}
+		return response()->json([
+			'msg' => 'success',
+			'message' => 'Update gallery success!',
+		]);
 	}
 
 	public function deleteMetaAPI(Request $request) {

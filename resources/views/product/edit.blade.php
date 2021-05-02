@@ -4,43 +4,28 @@
 <a href="{{route('productitem.index')}}"  class="btn btn-default float-left">
 	<i class="fa fa-backward"></i> @lang('Back')
 </a>
-<a href="#" onclick="save()"  class="btn btn-primary float-left">
-	<i class="fa fa-floppy-o"></i> @lang('Save & Close')
-</a>
-<a href="#" onclick="update()"  class="btn btn-warning float-left">
-	<i class="fa fa-wrench"></i> @lang('Update')
-</a>
+
 @endsection
 
 @section('content')
-
-
-<form class="form-horizontal" id="formSubmit" method="post" action="{{isset($data['post']) ? route('productitem.update',array('productitem'=>$data['post']->id)) : route('productitem.store')}}"  enctype="multipart/form-data">
-	@csrf
-	@isset($data['post']) @method('put') @endisset
-	<input type="hidden" id="typeSubmit" name="typeSubmit" value="">
-	<div class="nav-tabs-custom">
-		<ul class="nav nav-tabs">
-			<li class="active"><a href="#tab_1" data-toggle="tab">Main</a></li>
-			<li><a href="#tab_2" data-toggle="tab">Detail</a></li>
-			<li><a href="#tab_3" data-toggle="tab">Gallery</a></li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane active" id="tab_1">
-				@include('phobrv::product.main')
-			</div>
-			<div class="tab-pane" id="tab_2">
-				@include('phobrv::product.detail')
-			</div>
-			<div class="tab-pane" id="tab_3">
-				@include('phobrv::product.gallery')
-			</div>
+<div class="nav-tabs-custom">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab_1" data-toggle="tab">Main</a></li>
+		<li><a href="#tab_2" data-toggle="tab">Detail</a></li>
+		<li><a href="#tab_3" data-toggle="tab">Gallery</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab_1">
+			@include('phobrv::product.main')
+		</div>
+		<div class="tab-pane" id="tab_2">
+			@include('phobrv::product.detail')
+		</div>
+		<div class="tab-pane" id="tab_3">
+			@include('phobrv::product.gallery')
 		</div>
 	</div>
-	<button id="btnSubmit" style="display: none" type="submit" ></button>
-</form>
-
-
+</div>
 @endsection
 
 @section('styles')
@@ -54,7 +39,6 @@
 	};
 
 	function deleteImage(meta_id){
-
 		var anwser =  confirm("Bạn muốn image này?");
 		if(anwser){
 			$.ajax({
@@ -72,5 +56,62 @@
 			});
 		}
 	}
+
+	$('.MetaForm').submit(function(e){
+		e.preventDefault();
+
+		var data = {};
+		var getData = $(this).serializeArray();
+		for(var i=0;i<getData.length;i++){
+			if(getData[i]['name']!='_token')
+				data[getData[i]['name']] = getData[i]['value'];
+		}
+		var editors = $(this).find('textarea');
+		for(var j=0;j<editors.length;j++)
+		{
+			var name = editors[j].name;
+			if(CKEDITOR.instances[name])
+				data[name] = CKEDITOR.instances[name].getData();
+		}
+		$.ajax({
+			headers : { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+			url: '{{URL::route("menu.updateMetaAPI")}}',
+			type: 'POST',
+			data: {data: data},
+			success: function(output){
+				// console.log(output);
+				alertOutput(output['msg'],output['message'])
+			}
+		});
+	})
+
+	$('.GalleryForm').submit(function(e){
+		e.preventDefault();
+
+		var data = {};
+		var getData = $(this).serializeArray();
+		for(var i=0;i<getData.length;i++){
+			if(getData[i]['name']!='_token')
+				data[getData[i]['name']] = getData[i]['value'];
+		}
+		var editors = $(this).find('textarea');
+		for(var j=0;j<editors.length;j++)
+		{
+			var name = editors[j].name;
+			if(CKEDITOR.instances[name])
+				data[name] = CKEDITOR.instances[name].getData();
+		}
+		$.ajax({
+			headers : { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+			url: '{{URL::route("productitem.uploadGallery")}}',
+			type: 'POST',
+			data: {data: data},
+			success: function(output){
+				// console.log(output);
+				alertOutput(output['msg'],output['message'])
+			}
+		});
+	})
+
 </script>
 @endsection

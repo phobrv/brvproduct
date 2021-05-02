@@ -1,8 +1,12 @@
-<div class="form-group">
-	<div class="col-sm-12">
-		@include('phobrv::input.inputImage',['key'=>'images','basic'=>true])
+<form class="form-horizontal GalleryForm"  enctype="multipart/form-data">
+	@csrf
+	<input type="hidden" name="product_id" value="{{ $data['post']->id }}">
+	<div class="form-group">
+		<div class="col-sm-12">
+			@include('phobrv::input.inputImage',['key'=>'images','basic'=>true])
+		</div>
 	</div>
-</div>
+</form>
 <label>Danh sách image trong gallery product</label>
 <div class="row">
 	@if(isset($data['gallery']))

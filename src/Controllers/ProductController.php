@@ -104,9 +104,9 @@ class ProductController extends Controller {
 		$msg = __('Create prodcut success!');
 
 		if ($request->typeSubmit == 'save') {
-			return redirect()->route('productitem.index')->with('alert_success', $msg);
+			return redirect()->route('product.index')->with('alert_success', $msg);
 		} else {
-			return redirect()->route('productitem.edit', ['productitem' => $post->id])->with('alert_success', $msg);
+			return redirect()->route('product.edit', ['product' => $post->id])->with('alert_success', $msg);
 		}
 
 	}
@@ -174,9 +174,9 @@ class ProductController extends Controller {
 		$msg = __('Update  prodcut success!');
 
 		if ($request->typeSubmit == 'save') {
-			return redirect()->route('productitem.index')->with('alert_success', $msg);
+			return redirect()->route('product.index')->with('alert_success', $msg);
 		} else {
-			return redirect()->route('productitem.edit', ['productitem' => $post->id])->with('alert_success', $msg);
+			return redirect()->route('product.edit', ['product' => $post->id])->with('alert_success', $msg);
 		}
 
 	}
@@ -190,13 +190,13 @@ class ProductController extends Controller {
 	public function destroy($id) {
 		$this->postRepository->destroy($id);
 		$msg = __("Delete post success!");
-		return redirect()->route('productitem.index')->with('alert_success', $msg);
+		return redirect()->route('product.index')->with('alert_success', $msg);
 	}
 
 	public function updateUserSelectGroup(Request $request) {
 		$user = Auth::user();
 		$this->userRepository->insertMeta($user, array('product_select' => $request->select));
-		return redirect()->route('productitem.index');
+		return redirect()->route('product.index');
 	}
 
 	public function uploadGallery(Request $request) {

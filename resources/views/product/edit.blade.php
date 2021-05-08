@@ -1,7 +1,7 @@
 @extends('phobrv::layout.app')
 
 @section('header')
-<a href="{{route('productitem.index')}}"  class="btn btn-default float-left">
+<a href="{{route('product.index')}}"  class="btn btn-default float-left">
 	<i class="fa fa-backward"></i> @lang('Back')
 </a>
 
@@ -43,7 +43,7 @@
 		if(anwser){
 			$.ajax({
 				headers : { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-				url: '{{ route('productitem.deleteMetaAPI') }}',
+				url: '{{ route('product.deleteMetaAPI') }}',
 				type: 'POST',
 				data: {meta_id: meta_id},
 				success: function (res) {
@@ -103,7 +103,7 @@
 		}
 		$.ajax({
 			headers : { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-			url: '{{URL::route("productitem.uploadGallery")}}',
+			url: '{{URL::route("product.uploadGallery")}}',
 			type: 'POST',
 			data: {data: data},
 			success: function(output){

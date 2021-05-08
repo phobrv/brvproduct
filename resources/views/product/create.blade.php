@@ -1,7 +1,7 @@
 @extends('phobrv::layout.app')
 
 @section('header')
-<a href="{{route('productitem.index')}}"  class="btn btn-default float-left">
+<a href="{{route('product.index')}}"  class="btn btn-default float-left">
 	<i class="fa fa-backward"></i> @lang('Back')
 </a>
 
@@ -12,7 +12,7 @@
 	<div class="box-body">
 		<div class="row">
 			<div class="col-md-8">
-				<form class="form-horizontal" id="formSubmit" method="post" action="{{isset($data['post']) ? route('productitem.update',array('productitem'=>$data['post']->id)) : route('productitem.store')}}"  enctype="multipart/form-data">
+				<form class="form-horizontal" id="formSubmit" method="post" action="{{isset($data['post']) ? route('product.update',array('product'=>$data['post']->id)) : route('product.store')}}"  enctype="multipart/form-data">
 					@csrf
 					@isset($data['post']) @method('put') @endisset
 					<input type="hidden" id="typeSubmit" name="typeSubmit" value="">

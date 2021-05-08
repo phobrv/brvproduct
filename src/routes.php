@@ -1,17 +1,17 @@
 <?php
 Route::middleware(['web', 'auth', 'auth:sanctum', 'lang', 'verified'])->namespace('Phobrv\BrvCore\Http\Controllers')->group(function () {
 	Route::middleware(['can:product_manage'])->prefix('admin')->group(function () {
-		Route::resource('term/brand', 'TermController');
-		Route::resource('term/product', 'TermController');
+		Route::resource('brand', 'TermController');
+		Route::resource('productgroup', 'TermController');
 	});
 });
 
 Route::middleware(['web', 'auth', 'auth:sanctum', 'lang', 'verified'])->namespace('Phobrv\BrvProduct\Controllers')->group(function () {
 	Route::middleware(['can:product_manage'])->prefix('admin')->group(function () {
-		Route::resource('productitem', 'ProductController');
-		Route::post('/productitem/updateUserSelectGroup', 'ProductController@updateUserSelectGroup')->name('productitem.updateUserSelectGroup');
-		Route::post('/productitem/deleteMetaAPI', 'ProductController@deleteMetaAPI')->name('productitem.deleteMetaAPI');
-		Route::post('/productitem/uploadGallery', 'ProductController@uploadGallery')->name('productitem.uploadGallery');
+		Route::resource('product', 'ProductController');
+		Route::post('/product/updateUserSelectGroup', 'ProductController@updateUserSelectGroup')->name('product.updateUserSelectGroup');
+		Route::post('/product/deleteMetaAPI', 'ProductController@deleteMetaAPI')->name('product.deleteMetaAPI');
+		Route::post('/product/uploadGallery', 'ProductController@uploadGallery')->name('product.uploadGallery');
 
 	});
 });

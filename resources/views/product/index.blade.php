@@ -3,12 +3,12 @@
 @section('header')
 <ul>
 <li>
-<a href="{{route('productitem.create')}}"  class="btn btn-primary float-left">
+<a href="{{route('product.create')}}"  class="btn btn-primary float-left">
     <i class="fa fa-edit"></i> @lang('Create new')
 </a>
 </li>
 <li class="text-center">
-{{ Form::open(array('route'=>'productitem.updateUserSelectGroup','method'=>'post')) }}
+{{ Form::open(array('route'=>'product.updateUserSelectGroup','method'=>'post')) }}
 <table class="form" width="100%" border="0" cellspacing="1" cellpadding="1">
 	<tbody>
 		<tr>
@@ -59,10 +59,10 @@
 
 					</td>
 					<td align="center">
-						<a href="{{route('productitem.edit',array('productitem'=>$r->id))}}"><i class="fa fa-edit" title="Sửa"></i></a>
+						<a href="{{route('product.edit',array('product'=>$r->id))}}"><i class="fa fa-edit" title="Sửa"></i></a>
 						&nbsp;&nbsp;&nbsp;
 						<a style="color: red" href="#" onclick="destroy('destroy{{$r->id}}')"><i class="fa fa-times" title="Sửa"></i></a>
-						<form id="destroy{{$r->id}}" action="{{ route('productitem.destroy',array('productitem'=>$r->id)) }}" method="post" style="display: none;">
+						<form id="destroy{{$r->id}}" action="{{ route('product.destroy',array('product'=>$r->id)) }}" method="post" style="display: none;">
 							@method('delete')
 							@csrf
 						</form>

@@ -4,10 +4,10 @@ namespace Phobrv\BrvProduct\Controllers;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
-use Phobrv\CoreAdmin\Repositories\PostRepository;
-use Phobrv\CoreAdmin\Repositories\TermRepository;
-use Phobrv\CoreAdmin\Repositories\UserRepository;
-use Phobrv\CoreAdmin\Services\UnitServices;
+use Phobrv\BrvCore\Repositories\PostRepository;
+use Phobrv\BrvCore\Repositories\TermRepository;
+use Phobrv\BrvCore\Repositories\UserRepository;
+use Phobrv\BrvCore\Services\UnitServices;
 
 class ProductController extends Controller {
 	protected $userRepository;

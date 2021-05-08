@@ -1,5 +1,5 @@
 <?php
-Route::middleware(['web', 'auth', 'auth:sanctum', 'lang', 'verified'])->namespace('Phobrv\CoreAdmin\Http\Controllers')->group(function () {
+Route::middleware(['web', 'auth', 'auth:sanctum', 'lang', 'verified'])->namespace('Phobrv\BrvCore\Http\Controllers')->group(function () {
 	Route::middleware(['can:product_manage'])->prefix('admin')->group(function () {
 		Route::resource('term/brand', 'TermController');
 		Route::resource('term/product', 'TermController');

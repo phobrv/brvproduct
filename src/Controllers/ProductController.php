@@ -8,6 +8,7 @@ use Phobrv\BrvCore\Repositories\PostRepository;
 use Phobrv\BrvCore\Repositories\TermRepository;
 use Phobrv\BrvCore\Repositories\UserRepository;
 use Phobrv\BrvCore\Services\UnitServices;
+use Yajra\Datatables\Datatables;
 
 class ProductController extends Controller {
 	protected $userRepository;
@@ -30,14 +31,8 @@ class ProductController extends Controller {
 		$this->taxonomy = config('option.taxonomy.product');
 		$this->type = config('option.post_type.product');
 	}
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+
 	public function index() {
-		$user = Auth::user();
-		//Breadcrumb
 		$data['breadcrumbs'] = $this->unitService->generateBreadcrumbs(
 			[
 				['text' => 'Products', 'href' => ''],
@@ -45,27 +40,36 @@ class ProductController extends Controller {
 		);
 
 		try {
-
-			$data['select'] = $this->userRepository->getMetaValueByKey($user, 'product_select');
 			$data['arrayGroup'] = $this->termRepository->getArrayTerms($this->taxonomy);
-
-			if (!isset($data['select']) || $data['select'] == 0) {
-				$data['products'] = $this->postRepository->all()->where('type', 'product');
-			} else {
-				$data['products'] = $this->termRepository->getPostsByTermID($data['select']);
-
-			}
 			return view('phobrv::product.index')->with('data', $data);
 		} catch (Exception $e) {
 			return back()->with('alert_danger', $e->getMessage());
 		}
 	}
+	public function getData() {
+		$user = Auth::user();
+		$data['select'] = $this->userRepository->getMetaValueByKey($user, 'product_select');
+		if (!isset($data['select']) || $data['select'] == 0) {
+			$data['products'] = $this->postRepository->all()->where('type', 'product');
+		} else {
+			$data['products'] = $this->termRepository->getPostsByTermID($data['select']);
+		}
+		return Datatables::of($data['products'])
+			->addColumn('title', function ($product) {
+				return view('phobrv::product.components.viewTitle', ['product' => $product]);
+			})
+			->addColumn('edit', function ($product) {
+				return view('phobrv::product.components.editBtn', ['product' => $product]);
+			})
+			->addColumn('status', function ($product) {
+				return view('phobrv::product.components.statusLabel', ['product' => $product]);
+			})
+			->addColumn('delete', function ($product) {
+				return view('phobrv::product.components.deleteBtn', ['product' => $product]);
+			})
+			->make(true);
+	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
 	public function create() {
 		//Breadcrumb
 		$data['breadcrumbs'] = $this->unitService->generateBreadcrumbs(
@@ -84,12 +88,6 @@ class ProductController extends Controller {
 		}
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
 	public function store(Request $request) {
 		$request->request->add(['slug' => $this->unitService->renderSlug($request->title)]);
 		$request->validate([
@@ -111,22 +109,10 @@ class ProductController extends Controller {
 
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function show($id) {
 		//
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function edit($id) {
 		//Breadcrumb
 		$data['breadcrumbs'] = $this->unitService->generateBreadcrumbs(
@@ -148,13 +134,6 @@ class ProductController extends Controller {
 		}
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function update(Request $request, $id) {
 		$request->request->add(['slug' => $this->unitService->renderSlug($request->title)]);
 		$request->validate([
@@ -181,12 +160,6 @@ class ProductController extends Controller {
 
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function destroy($id) {
 		$this->postRepository->destroy($id);
 		$msg = __("Delete post success!");

@@ -1,0 +1,1 @@
+<div><a href="{{ route('product.edit',array('product'=>$product->id)) }}"><i class="fa fa-edit" title="Sửa"></i></a></div>

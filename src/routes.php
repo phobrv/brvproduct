@@ -12,6 +12,7 @@ Route::middleware(['web', 'auth', 'auth:sanctum', 'lang', 'verified'])->namespac
 		Route::post('/product/updateUserSelectGroup', 'ProductController@updateUserSelectGroup')->name('product.updateUserSelectGroup');
 		Route::post('/product/deleteMetaAPI', 'ProductController@deleteMetaAPI')->name('product.deleteMetaAPI');
 		Route::post('/product/uploadGallery', 'ProductController@uploadGallery')->name('product.uploadGallery');
+		Route::get('getData', 'ProductController@getData')->name('product.getData');
 
 	});
 });

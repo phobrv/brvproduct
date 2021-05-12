@@ -40,6 +40,8 @@ class ProductController extends Controller {
 		);
 
 		try {
+			$user = Auth::user();
+			$data['select'] = $this->userRepository->getMetaValueByKey($user, 'product_select');
 			$data['arrayGroup'] = $this->termRepository->getArrayTerms($this->taxonomy);
 			return view('phobrv::product.index')->with('data', $data);
 		} catch (Exception $e) {

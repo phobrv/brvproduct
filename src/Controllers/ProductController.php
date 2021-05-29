@@ -8,6 +8,7 @@ use Phobrv\BrvCore\Repositories\PostRepository;
 use Phobrv\BrvCore\Repositories\TermRepository;
 use Phobrv\BrvCore\Repositories\UserRepository;
 use Phobrv\BrvCore\Services\UnitServices;
+use Phobrv\BrvCore\Services\VString;
 use Yajra\Datatables\Datatables;
 
 class ProductController extends Controller {
@@ -17,13 +18,16 @@ class ProductController extends Controller {
 	protected $unitService;
 	protected $taxonomy;
 	protected $type;
+	protected $vstring;
 
 	public function __construct(
+		VString $vstring,
 		UserRepository $userRepository,
 		TermRepository $termRepository,
 		PostRepository $postRepository,
 		UnitServices $unitService
 	) {
+		$this->vstring = $vstring;
 		$this->userRepository = $userRepository;
 		$this->termRepository = $termRepository;
 		$this->postRepository = $postRepository;
@@ -91,7 +95,7 @@ class ProductController extends Controller {
 	}
 
 	public function store(Request $request) {
-		$request->request->add(['slug' => $this->unitService->renderSlug($request->title)]);
+		$request->merge(['slug' => $this->vstring->standardKeyword($request->title)]);
 		$request->validate([
 			'slug' => 'required|unique:posts',
 		]);
@@ -137,7 +141,7 @@ class ProductController extends Controller {
 	}
 
 	public function update(Request $request, $id) {
-		$request->request->add(['slug' => $this->unitService->renderSlug($request->title)]);
+		$request->merge(['slug' => $this->vstring->standardKeyword($request->title)]);
 		$request->validate([
 			'slug' => 'required|unique:posts,slug,' . $id,
 		]);
@@ -148,12 +152,8 @@ class ProductController extends Controller {
 		if (isset($data['group'])) {
 			$post->terms()->sync($data['group']);
 		}
-
 		$this->postRepository->handleSeoMeta($post, $request);
-		// $this->handleMeta($post, $request);
-
 		$msg = __('Update  prodcut success!');
-
 		if ($request->typeSubmit == 'save') {
 			return redirect()->route('product.index')->with('alert_success', $msg);
 		} else {

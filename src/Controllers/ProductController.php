@@ -32,7 +32,7 @@ class ProductController extends Controller {
 		$this->termRepository = $termRepository;
 		$this->postRepository = $postRepository;
 		$this->unitService = $unitService;
-		$this->taxonomy = config('option.taxonomy.productgroup');
+		$this->taxonomy = config('term.taxonomy.productgroup');
 		$this->type = config('option.post_type.product');
 	}
 

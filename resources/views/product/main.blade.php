@@ -28,7 +28,7 @@
 				{{ Form::textarea('content',old('content',(isset($data['post']) && $data['post']) ? $data['post']->content : ''),array('class'=>'form-control','rows'=>'20')) }}
 			</div>
 			<div class="col-md-4">
-				@include('phobrv::input.inputImage',['key'=>'thumb'])
+				@include('phobrv::input.inputImage',['key'=>'thumb','basic'=>true])
 				<hr>
 				<div class="form-group">
 					<div class="col-sm-12">

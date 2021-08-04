@@ -13,6 +13,7 @@ Route::middleware(['web', 'auth', 'auth:sanctum', 'lang', 'verified'])->namespac
 		Route::post('/product/deleteMetaAPI', 'ProductController@deleteMetaAPI')->name('product.deleteMetaAPI');
 		Route::post('/product/uploadGallery', 'ProductController@uploadGallery')->name('product.uploadGallery');
 		Route::get('/product-getData', 'ProductController@getData')->name('product.getData');
-
+		Route::post('/product/apiDelete', 'ProductController@apiDelete')->name('product.apiDelete');
+		
 	});
 });

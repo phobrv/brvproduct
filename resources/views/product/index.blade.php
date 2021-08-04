@@ -46,7 +46,6 @@
 		</table>
 	</div>
 </div>
-
 @endsection
 
 @section('styles')
@@ -55,7 +54,7 @@
 
 @section('scripts')
 <script type="text/javascript">
-	table =  $('#tableProduct').DataTable({
+	var tableProduct =  $('#tableProduct').DataTable({
 		lengthMenu: [[15,35,50, -1], [15,35,50, "All"]],
 		processing: true,
 		serverSide: true,
@@ -69,44 +68,21 @@
 		{ data: 'delete', name: 'delete',orderable: false, searchable: false,className:'text-center'},
 		]
 	})
-	function destroy(form){
+	function destroy(id){
 		var anwser =  confirm("Bạn muốn xóa sản phẩm này?");
 		if(anwser){
-			event.preventDefault();
-			document.getElementById(form).submit();
+			$.ajax({
+				headers : { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+				url: '{{ route('product.apiDelete') }}',
+				type: 'POST',
+				data: {id},
+				success: function (res) {
+					if(res.msg == 'success'){
+						tableProduct.draw()
+					}	
+				}
+			});	
 		}
 	}
 </script>
 @endsection
-
-
-
-{{-- <tbody>
-	@if($data['products'])
-	@foreach($data['products'] as $r)
-	<tr>
-		<td align="center">{{$loop->index+1}}</td>
-		<td><a target="_blank" href="{{ route('level1',['slug'=>$r->slug]) }}">{{$r->title}} </a> </td>
-		<td class="list-category">
-			@isset($r->terms)
-			@foreach($r->terms as $key => $group)
-			@isset($data['arrayGroup'][$group->id])
-			<span class="comma"> , </span> {{$group->name}}
-			@endif
-			@endforeach
-			@endisset
-
-		</td>
-		<td align="center">
-			<a href="{{route('product.edit',array('product'=>$r->id))}}"><i class="fa fa-edit" title="Sửa"></i></a>
-			&nbsp;&nbsp;&nbsp;
-			<a style="color: red" href="#" onclick="destroy('destroy{{$r->id}}')"><i class="fa fa-times" title="Sửa"></i></a>
-			<form id="destroy{{$r->id}}" action="{{ route('product.destroy',array('product'=>$r->id)) }}" method="post" style="display: none;">
-				@method('delete')
-				@csrf
-			</form>
-		</td>
-	</tr>
-	@endforeach
-	@endif
-</tbody> --}}

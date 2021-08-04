@@ -190,6 +190,12 @@ class ProductController extends Controller {
 		]);
 	}
 
+	public function apiDelete(Request $request){
+		$data = $request->all();
+		$this->postRepository->destroy($data['id']);
+		return response()->json(['code' => '0', 'msg' => 'success']);
+	}
+
 	public function deleteMetaAPI(Request $request) {
 		$meta_id = $request->meta_id;
 		$this->postRepository->removeMeta($meta_id);

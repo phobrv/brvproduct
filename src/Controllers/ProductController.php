@@ -56,13 +56,15 @@ class ProductController extends Controller {
 		$user = Auth::user();
 		$data['select'] = $this->userRepository->getMetaValueByKey($user, 'product_select');
 		if (!isset($data['select']) || $data['select'] == 0) {
-			$data['products'] = $this->postRepository->all()->where('type', 'product');
+			$data['products'] = $this->postRepository->all()->where('type', 'product')->sortByDesc('created_at');
 		} else {
 			$data['products'] = $this->termRepository->getPostsByTermID($data['select']);
 		}
 
-		for ($i=0; $i < count($data['products']) ; $i++) { 
-			$data['products'][$i]['i'] = $i+1; 
+		$i=0;
+		foreach ($data['products'] as $key => $value) { 
+			$i++;
+			$data['products'][$key]['i'] = $i; 
 		}
 
 		return Datatables::of($data['products'])

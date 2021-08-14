@@ -62,7 +62,7 @@ class ProductController extends Controller {
 		}
 
 		for ($i=0; $i < count($data['products']) ; $i++) { 
-			$data['i'] = $i+1; 
+			$data['products'][$i]['i'] = $i+1; 
 		}
 
 		return Datatables::of($data['products'])

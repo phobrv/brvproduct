@@ -61,7 +61,7 @@
 		ajax: "{{ route('product.getData') }}",
 		columns:
 		[
-		{ data: 'id', name: 'id' ,className:'text-center'},
+		{ data: 'i', name: 'i' ,className:'text-center'},
 		{ data: 'title', name: 'title' },
 		{ data: 'status', name: 'status', orderable: false, searchable: false,className:'text-center'},
 		{ data: 'edit', name: 'edit',orderable: false, searchable: false,className:'text-center'},

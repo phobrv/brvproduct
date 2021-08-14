@@ -60,6 +60,11 @@ class ProductController extends Controller {
 		} else {
 			$data['products'] = $this->termRepository->getPostsByTermID($data['select']);
 		}
+
+		for ($i=0; $i < count($data['products']) ; $i++) { 
+			$data['i'] = $i+1; 
+		}
+
 		return Datatables::of($data['products'])
 			->addColumn('title', function ($product) {
 				return view('phobrv::product.components.viewTitle', ['product' => $product]);

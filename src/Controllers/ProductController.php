@@ -164,6 +164,7 @@ class ProductController extends Controller
         try {
             $data['group'] = $this->termRepository->getTermsOrderByParent($this->taxonomy);
             $data['post'] = $this->postRepository->find($id);
+            $data['boxTranslate'] = $this->configLangService->genLangTranslateBox($data['post']);
             $data['arrayGroupID'] = $this->termRepository->getArrayTermIDByTaxonomy($data['post']->terms, $this->taxonomy);
             $data['gallery'] = $this->postRepository->getMultiMetaByKey($data['post']->postMetas, "image");
             $data['meta'] = $this->postRepository->getMeta($data['post']->postMetas);
@@ -184,9 +185,7 @@ class ProductController extends Controller
         $post = $this->postRepository->update($data, $id);
 
         if (isset($data['group'])) {
-            $productgroup = $this->termRepository->getArrayTermIDByTaxonomy($post->terms, 'productgroup');
-            $post->terms()->detach($productgroup);
-            $post->terms()->attach($data['group']);
+            $this->syncGroupLang($post, $data['group']);
         }
         $this->postRepository->handleSeoMeta($post, $request);
         $msg = __('Update  prodcut success!');
@@ -241,5 +240,19 @@ class ProductController extends Controller
         $meta_id = $request->meta_id;
         $this->postRepository->removeMeta($meta_id);
         return $meta_id;
+    }
+
+    public function syncGroupLang($post, $arrGroup)
+    {
+        $term = $post->terms->where('taxonomy', config('term.taxonomy.lang'))->first();
+        $productgroup = $this->termRepository->getArrayTermIDByTaxonomy($post->terms, 'productgroup');
+
+        if ($term) {
+            $posts = $this->termRepository->find($term->id)->posts;
+            foreach ($posts as $post) {
+                $post->terms()->detach($productgroup);
+                $post->terms()->attach($arrGroup);
+            }
+        }
     }
 }

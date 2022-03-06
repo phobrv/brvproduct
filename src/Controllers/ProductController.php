@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 use Phobrv\BrvCore\Repositories\PostRepository;
 use Phobrv\BrvCore\Repositories\TermRepository;
 use Phobrv\BrvCore\Repositories\UserRepository;
+use Phobrv\BrvCore\Services\ConfigLangService;
 use Phobrv\BrvCore\Services\UnitServices;
 use Phobrv\BrvCore\Services\VString;
 use Yajra\Datatables\Datatables;
 
 class ProductController extends Controller
 {
+    protected $configLangService;
     protected $userRepository;
     protected $termRepository;
     protected $postRepository;
@@ -24,12 +26,14 @@ class ProductController extends Controller
 
     public function __construct(
         VString $vstring,
+        ConfigLangService $configLangService,
         UserRepository $userRepository,
         TermRepository $termRepository,
         PostRepository $postRepository,
         UnitServices $unitService
     ) {
         $this->vstring = $vstring;
+        $this->configLangService = $configLangService;
         $this->userRepository = $userRepository;
         $this->termRepository = $termRepository;
         $this->postRepository = $postRepository;
@@ -45,7 +49,6 @@ class ProductController extends Controller
                 ['text' => 'Products', 'href' => ''],
             ]
         );
-
         try {
             $user = Auth::user();
             $data['select'] = $this->userRepository->getMetaValueByKey($user, 'product_select');
@@ -65,10 +68,13 @@ class ProductController extends Controller
             $data['products'] = $this->termRepository->getPostsByTermID($data['select']);
         }
 
+        $langArray = $this->configLangService->getArrayLangConfig();
+
         $i = 0;
         foreach ($data['products'] as $key => $value) {
             $i++;
             $data['products'][$key]['i'] = $i;
+            $data['products'][$key]->buttons = $this->configLangService->genLangButton($value->id, $langArray);
         }
 
         return Datatables::of($data['products'])
@@ -80,6 +86,9 @@ class ProductController extends Controller
             })
             ->addColumn('status', function ($product) {
                 return view('phobrv::product.components.statusLabel', ['product' => $product]);
+            })
+            ->addColumn('langButtons', function ($product) {
+                return view('phobrv::product.components.langButtons', ['buttons' => $product->buttons]);
             })
             ->addColumn('delete', function ($product) {
                 return view('phobrv::product.components.deleteBtn', ['product' => $product]);
@@ -100,6 +109,7 @@ class ProductController extends Controller
         try {
             $data['group'] = $this->termRepository->getTermsOrderByParent($this->taxonomy);
             $data['arrayGroupID'] = array();
+            $data['lang'] = $this->configLangService->getMainLang();
             return view('phobrv::product.create')->with('data', $data);
         } catch (Exception $e) {
             return back()->with('alert_danger', $e->getMessage());
@@ -109,15 +119,21 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->merge(['slug' => $this->vstring->standardKeyword($request->title)]);
-        $request->validate([
-            'slug' => 'required|unique:posts',
-        ]);
+        $request->validate(
+            [
+                'slug' => 'required|unique:posts',
+            ],
+            [
+                'slug.unique' => 'Title đã tồn tại',
+                'slug.required' => 'Title không được phép để rỗng',
+            ]
+        );
 
         $data = $request->all();
         $data['user_id'] = Auth::id();
         $data['type'] = $this->type;
         $post = $this->postRepository->create($data);
-
+        $this->configLangService->createTermLang($post);
         $msg = __('Create prodcut success!');
 
         if ($request->typeSubmit == 'save') {
@@ -166,7 +182,9 @@ class ProductController extends Controller
         $post = $this->postRepository->update($data, $id);
 
         if (isset($data['group'])) {
-            $post->terms()->sync($data['group']);
+            $productgroup = $this->termRepository->getArrayTermIDByTaxonomy($post->terms, 'productgroup');
+            $post->terms()->detach($productgroup);
+            $post->terms()->attach($data['group']);
         }
         $this->postRepository->handleSeoMeta($post, $request);
         $msg = __('Update  prodcut success!');

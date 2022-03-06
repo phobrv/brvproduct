@@ -39,6 +39,7 @@
 					<th class="text-center">#</th>
 					<th>{{__('Name')}}</th>
 					<th>{{__('Status')}}</th>
+					<th>{{__('Lang')}}</th>
 					<th>Edit</th>
 					<th>Delete</th>
 				</tr>
@@ -64,6 +65,7 @@
 		{ data: 'i', name: 'i' ,className:'text-center'},
 		{ data: 'title', name: 'title' },
 		{ data: 'status', name: 'status', orderable: false, searchable: false,className:'text-center'},
+		{ data: 'langButtons', name: 'langButtons', orderable: false, searchable: false,className:'text-center'},
 		{ data: 'edit', name: 'edit',orderable: false, searchable: false,className:'text-center'},
 		{ data: 'delete', name: 'delete',orderable: false, searchable: false,className:'text-center'},
 		]
@@ -79,9 +81,9 @@
 				success: function (res) {
 					if(res.msg == 'success'){
 						tableProduct.draw()
-					}	
+					}
 				}
-			});	
+			});
 		}
 	}
 </script>

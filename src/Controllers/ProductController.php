@@ -23,6 +23,7 @@ class ProductController extends Controller
     protected $taxonomy;
     protected $type;
     protected $vstring;
+    protected $langMain;
 
     public function __construct(
         VString $vstring,
@@ -40,6 +41,7 @@ class ProductController extends Controller
         $this->unitService = $unitService;
         $this->taxonomy = config('term.taxonomy.productgroup');
         $this->type = config('option.post_type.product');
+        $this->langMain = $configLangService->getMainLang();
     }
 
     public function index()
@@ -63,9 +65,9 @@ class ProductController extends Controller
         $user = Auth::user();
         $data['select'] = $this->userRepository->getMetaValueByKey($user, 'product_select');
         if (!isset($data['select']) || $data['select'] == 0) {
-            $data['products'] = $this->postRepository->all()->where('type', 'product')->sortByDesc('created_at');
+            $data['products'] = $this->postRepository->all()->where('type', 'product')->where('lang', $this->langMain)->sortByDesc('created_at');
         } else {
-            $data['products'] = $this->termRepository->getPostsByTermID($data['select']);
+            $data['products'] = $this->termRepository->getPostsByTermID($data['select'])->where('lang', $this->langMain);
         }
 
         $langArray = $this->configLangService->getArrayLangConfig();

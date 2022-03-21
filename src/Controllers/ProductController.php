@@ -253,6 +253,8 @@ class ProductController extends Controller
                 $post->terms()->detach($productgroup);
                 $post->terms()->attach($arrGroup);
             }
+        } else {
+            $post->terms()->sync($arrGroup);
         }
     }
 }

@@ -1,4 +1,4 @@
-@extends('phobrv::layout.app')
+@extends('phobrv::adminlte3.layout')
 
 @section('header')
 <ul>
@@ -31,8 +31,8 @@
 @endsection
 
 @section('content')
-<div class="box box-primary">
-	<div class="box-body">
+<div class="card">
+	<div class="card-body">
 		<table id="tableProduct" class="table table-bordered table-striped">
 			<thead>
 				<tr>

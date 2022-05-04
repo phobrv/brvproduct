@@ -8,7 +8,7 @@
 	@csrf
 	@isset($data['post']) @method('put') @endisset
 	<input type="hidden" id="typeSubmit" name="typeSubmit" value="">
-	<div class="box-body">
+	<div class="card-body">
 		<div class="row">
 			<div class="col-md-8">
 				@isset($data['post'])

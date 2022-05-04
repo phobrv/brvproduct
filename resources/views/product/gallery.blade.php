@@ -6,7 +6,7 @@
 			@include('phobrv::input.inputImage',['key'=>'images','basic'=>true])
 		</div>
 	</div>
-	<div class="box-footer">
+	<div class="card-footer">
 		{{ Form::submit('Lưu cấu hình',array('class'=>'btn btn-primary pull-right')) }}
 	</div>
 </form>

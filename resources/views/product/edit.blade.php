@@ -1,4 +1,4 @@
-@extends('phobrv::layout.app')
+@extends('phobrv::adminlte3.layout')
 
 @section('header')
 <a href="{{route('product.index')}}"  class="btn btn-default float-left">

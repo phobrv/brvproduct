@@ -1,4 +1,4 @@
-@extends('phobrv::layout.app')
+@extends('phobrv::adminlte3.layout')
 
 @section('header')
 <a href="{{route('product.index')}}"  class="btn btn-default float-left">
@@ -8,8 +8,8 @@
 @endsection
 
 @section('content')
-<div class="box box-primary">
-	<div class="box-body">
+<div class="card">
+	<div class="card-body">
 		<div class="row">
 			<div class="col-md-8">
 				<form class="form-horizontal" id="formSubmit" method="post" action="{{route('product.store')}}"  enctype="multipart/form-data">

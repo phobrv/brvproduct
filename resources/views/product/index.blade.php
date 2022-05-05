@@ -4,7 +4,7 @@
 <ul>
 	<li>
 		<a href="{{route('product.create')}}"  class="btn btn-primary float-left">
-			<i class="fa fa-edit"></i> @lang('Create new')
+			<i class="far fa-edit"></i> @lang('Create new')
 		</a>
 	</li>
 	<li class="text-center">

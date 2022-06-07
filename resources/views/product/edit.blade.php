@@ -9,13 +9,13 @@
 
 @section('content')
 <div class="nav-tabs-custom">
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#tab_1" data-toggle="tab">Main</a></li>
-		<li><a href="#tab_2" data-toggle="tab">Detail</a></li>
-		<li><a href="#tab_3" data-toggle="tab">Gallery</a></li>
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item"><a class="nav-link active"   href="#tab_1" data-toggle="tab">Main</a></li>
+		<li class="nav-item"><a class="nav-link"   href="#tab_2" data-toggle="tab">Detail</a></li>
+		<li class="nav-item"><a class="nav-link"   href="#tab_3" data-toggle="tab">Gallery</a></li>
 	</ul>
-	<div class="tab-content">
-		<div class="tab-pane active" id="tab_1">
+	<div class="tab-content" id="myTabContent">
+		<div class="tab-pane fade show active" id="tab_1">
 			@include('phobrv::product.main')
 		</div>
 		<div class="tab-pane" id="tab_2">

@@ -172,7 +172,7 @@ class ProductController extends Controller
             $data['boxTranslate'] = $this->configLangService->genLangTranslateBox($data['post']);
             $data['arrayGroupID'] = $this->termRepository->getArrayTermIDByTaxonomy($data['post']->terms, $this->taxonomy);
             $data['gallery'] = $this->postService->getMultiMetaByKey($data['post']->postMetas, "image");
-            $data['meta'] = $this->postService->getMeta($data['post']->postMetas);
+            $data['meta'] =$data['post']->meta;
             return view('phobrv::product.edit')->with('data', $data);
         } catch (Exception $e) {
             return back()->with('alert_danger', $e->getMessage());

@@ -128,7 +128,7 @@ class ProductController extends Controller
         $request->merge(['slug' => $this->vstring->standardKeyword($request->title)]);
         $request->validate(
             [
-                'slug' => 'required|unique:posts',
+                'slug' => 'required|unique:brv_posts',
             ],
             [
                 'slug.unique' => 'Title đã tồn tại',
@@ -183,7 +183,7 @@ class ProductController extends Controller
     {
         $request->merge(['slug' => $this->vstring->standardKeyword($request->title)]);
         $request->validate([
-            'slug' => 'required|unique:posts,slug,' . $id,
+            'slug' => 'required|unique:brv_posts,slug,' . $id,
         ]);
         $data = $request->all();
 
